@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Harga Emas Dunia + Karat</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family: 'Poppins', sans-serif;
+  min-height:150vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)),
+    url('https://images.unsplash.com/photo-1610375461246-83df859d849d?q=80&w=1400&auto=format&fit=crop');
+
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+}
+
+.container{
+  width:100%;
+  max-width:560px;
+
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(18px);
+
+  border:1px solid rgba(255,255,255,0.2);
+
+  padding:35px;
+  border-radius:28px;
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.35),
+    inset 0 0 15px rgba(255,255,255,0.08);
+
+  color:white;
+
+  animation:fadeIn 1s ease;
+}
+
+h1{
+  text-align:center;
+  font-size:32px;
+  margin-bottom:25px;
+
+  background:linear-gradient(to right,#ffd700,#ffec8b,#ffc400);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  font-weight:700;
+}
+
+.harga{
+  text-align:center;
+  font-size:28px;
+  font-weight:bold;
+  padding:20px;
+  margin-bottom:25px;
+
+  border-radius:20px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+
+  color:#ffe27a;
+  box-shadow:0 0 25px rgba(255,215,0,0.25);
+}
+
+label{
+  display:block;
+  margin-bottom:10px;
+  margin-top:15px;
+  font-weight:600;
+  color:#fff3c4;
+}
+
+input, select{
+  width:100%;
+  padding:15px;
+  border:none;
+  outline:none;
+  border-radius:16px;
+  font-size:16px;
+  background:rgba(255,255,255,0.12);
+  color:white;
+  border:1px solid rgba(255,255,255,0.15);
+  transition:0.3s;
+}
+
+input:focus, select:focus{
+  transform:scale(1.02);
+  border:1px solid gold;
+  box-shadow:0 0 15px rgba(255,215,0,0.5);
+}
+
+option{ color:black; }
+
+button{
+  width:100%;
+  padding:16px;
+  margin-top:25px;
+
+  border:none;
+  border-radius:100px;
+
+  background:linear-gradient(45deg,#ffd700,#ffb700);
+  color:#222;
+
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+
+  transition:0.3s;
+  box-shadow:0 5px 20px rgba(255,215,0,0.5);
+}
+
+button:hover{
+  transform:translateY(-3px) scale(1.02);
+}
+
+.hasil{
+  margin-top:30px;
+  text-align:center;
+  padding:25px;
+
+  border-radius:20px;
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.25);
+
+  font-size:24px;
+  font-weight:bold;
+  color:#7dff8d;
+  display: none; /* Sembunyikan sebelum dihitung */
+  box-shadow:0 0 20px rgba(125,255,141,0.2);
+}
+
+.info-bayar {
+  font-size: 14px;
+  color: #fff;
+  font-weight: normal;
+  margin-top: 5px;
+  opacity: 0.8;
+}
+
+/* ===== ANIMASI EMAS & DUIT TERBANG ===== */
+.floating {
+  position: fixed;
+  top: -50px;
+  font-size: 24px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: fall linear forwards;
+  opacity: 0.9;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(30px);}
+  to{opacity:1; transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>💰 Kalkulator Emas & Pembayaran</h1>
+
+  <div class="harga" id="hargaEmas">Mengambil data harga...</div>
+
+  <label>Berat Emas (gram)</label>
+  <input type="number" id="gram" step="0.01" placeholder="Contoh: 10">
+
+  <label>Pilih Karat Emas</label>
+  <select id="karat">
+    <option value="1">24 Karat (99.9%)</option>
+    <option value="0.916">22 Karat (91.6%)</option>
+    <option value="0.875">21 Karat (87.5%)</option>
+    <option value="0.75">18 Karat (75%)</option>
+    <option value="0.585">14 Karat (58.5%)</option>
+    <option value="0.417">10 Karat (41.7%)</option>
+    <option value="0.300">5 Karat (30.5%)</option>
+  </select>
+
+  <label>Metode Pembayaran</label>
+  <select id="metodeBayar">
+    <option value="tunai">Tunai / Transfer Bank (Tanpa Biaya)</option>
+    <option value="qris">QRIS (Biaya 0.7%)</option>
+    <option value="kartu_kredit">Kartu Kredit (Biaya 2.5%)</option>
+  </select>
+
+  <button onclick="hitungHarga()">Hitung Total Harga</button>
+
+  <div class="hasil" id="hasil"></div>
+
+</div>
+
+<script>
+let harga24K = 0;
+
+// ===== AMBIL HARGA EMAS =====
+async function ambilHargaEmas(){
+  try{
+    const gold = await fetch("https://api.gold-api.com/price/XAU");
+    const goldData = await gold.json();
+
+    const kurs = await fetch("https://open.er-api.com/v6/latest/USD");
+    const kursData = await kurs.json();
+
+    const usdToIdr = kursData.rates.IDR;
+    const ounceUSD = goldData.price;
+
+    const gramUSD = ounceUSD / 31.1035;
+    harga24K = gramUSD * usdToIdr;
+
+    document.getElementById("hargaEmas").innerHTML =
+      "24K : Rp " + Math.round(harga24K).toLocaleString("id-ID") + " / gram";
+
+  } catch(err){
+    document.getElementById("hargaEmas").innerHTML =
+      "Gagal mengambil harga emas";
+  }
+}
+
+// ===== HITUNG HARGA & PEMBAYARAN =====
+function hitungHarga(){
+  const gram = parseFloat(document.getElementById("gram").value);
+  const kadar = parseFloat(document.getElementById("karat").value);
+  const metode = document.getElementById("metodeBayar").value;
+
+  if(!gram || gram <= 0){
+    alert("Masukkan berat emas dengan benar!");
+    return;
+  }
+
+  if(harga24K === 0){
+    alert("Data harga emas belum termuat sempurna, silakan tunggu sebentar.");
+    return;
+  }
+
+  // Hitung harga dasar emas berdasarkan karat
+  const hargaPerGram = harga24K * kadar;
+  let totalDasar = hargaPerGram * gram;
+  let biayaTambahan = 0;
+  let labelBiaya = "";
+
+  // Logika Tambahan Mode Pembayaran
+  if(metode === "qris") {
+    biayaTambahan = totalDasar * 0.007; // Biaya QRIS 0.7%
+    labelBiaya = `<div class="info-bayar">(Termasuk Biaya QRIS 0.7%: Rp ${Math.round(biayaTambahan).toLocaleString("id-ID")})</div>`;
+  } else if(metode === "kartu_kredit") {
+    biayaTambahan = totalDasar * 0.025; // Biaya Kartu Kredit 2.5%
+    labelBiaya = `<div class="info-bayar">(Termasuk Biaya Kartu Kredit 2.5%: Rp ${Math.round(biayaTambahan).toLocaleString("id-ID")})</div>`;
+  }
+
+  const totalAkhir = totalDasar + biayaTambahan;
+
+  // Tampilkan hasil
+  const hasilDiv = document.getElementById("hasil");
+  hasilDiv.style.display = "block";
+  hasilDiv.innerHTML = `Total: Rp ${Math.round(totalAkhir).toLocaleString("id-ID")} ${labelBiaya}`;
+
+  // ===== EFEK DUIT TERBANG =====
+  for(let i=0; i<20; i++){
+    setTimeout(createFloating, i*50);
+  }
+}
+
+// ===== EMAS & DUIT TERBANG =====
+function createFloating(){
+  const el = document.createElement("div");
+  el.classList.add("floating");
+
+  const icons = ["🪙","💰","💸","💵","✨"];
+  el.innerText = icons[Math.floor(Math.random()*icons.length)];
+
+  el.style.left = Math.random()*100 + "vw";
+  el.style.fontSize = (Math.random()*20+20)+"px";
+  el.style.animationDuration = (Math.random()*3+3)+"s";
+
+  document.body.appendChild(el);
+
+  setTimeout(()=>el.remove(),6000);
+}
+
+// Auto hujan latar belakang lambat
+setInterval(createFloating, 1500);
+
+// Load awal data API
+ambilHargaEmas();
+setInterval(ambilHargaEmas, 60000);
+</script>
+
+</body>
+</html>
